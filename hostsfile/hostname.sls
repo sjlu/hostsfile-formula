@@ -13,6 +13,7 @@ etc-sysconfig-network:
     - pattern: HOSTNAME=localhost.localdomain
     - repl: HOSTNAME={{ fqdn }}
 
+
 {% endif %}
 
 {%- if grains['os_family'] == 'Suse' %}
@@ -25,6 +26,11 @@ etc-sysconfig-network:
   file.managed:
     - contents: {{ fqdn }}
     - backup: false
+
+/etc/hosts:
+  file.replace:
+    - pattern: ^127\.0\.0\.1\s*localhost\n
+    - repl: 127.0.0.1 localhost {{ fqdn }}\n
 {% endif %}
 
 set-fqdn:
